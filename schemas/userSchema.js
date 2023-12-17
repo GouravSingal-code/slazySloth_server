@@ -2,29 +2,38 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const linkSchema = require('./linkSchema.js')
 
+
 const userSchema = new Schema({
-    id : {
-       type : String,
-       required : true,
-       unique : true 
-    },
     pic : {
         type : Buffer
     },
     name: {
        type: String,
-       required: true,
-       unique: false,
+    },
+    state: {
+        type: String,
+    },
+    country: {
+        type: String,
+    },
+    company: {
+        type: String,
+    },
+    college: {
+        type: String,
+    },
+    designation: {
+        type: String,
     },
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
     },
     password: {
         type: String,
         required: true,
-        unique:true,
+        unique:true
     },
     links:{
         type:[linkSchema],

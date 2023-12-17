@@ -9,19 +9,34 @@ class UserModel {
   //   return users;
   // }
 
-  async getUserById(userId) {
-    const user = await User.findById(userId);
-    return user;
+  async getUserByQueryObject(queryObject) {
+    try{
+      const user = await User.findOne(queryObject);
+      return user;
+    }catch (e){
+      console.log(e);
+      return e["message"];
+    }
   }
 
   async createUser(newUser) {
-    const createdUser = await User.create(newUser);
-    return createdUser;
+    try{
+      console.log(newUser);
+      const createdUser = await User.create(newUser);
+      console.log(createdUser);
+      return createdUser;
+    }catch (e){
+      return e["message"];
+    }
   }
 
   async updateUser(userId, updatedUser) {
-    const user = await User.findByIdAndUpdate(userId, updatedUser, { new: true });
-    return user;
+    try{
+      const newUser = await User.findByIdAndUpdate(userId, updatedUser, { new: true });
+      return newUser;
+    }catch (e){
+      return e["message"];
+    }
   }
 
   async deleteUser(userId) {

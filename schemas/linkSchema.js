@@ -6,10 +6,13 @@ const linkSchema = new Schema({
         type : String,
         required : true
     },
-    link : {
+    name : {
         type : String,
         required : true
+    },
+    link : {
+        type : String,
      }
 })
 
-module.exports = contentSchema
+module.exports = linkSchema

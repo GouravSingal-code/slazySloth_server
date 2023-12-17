@@ -1,6 +1,6 @@
-const responseBody = (msg , obj) => {
-    obj["message"] = msg;
-    return responseBody;
-  };
+const responseBody = (status, msg , obj) => {
+    const newObj = { ...obj, status: status,message: msg};
+    return JSON.stringify(newObj);
+};
   
 module.exports = { responseBody };
