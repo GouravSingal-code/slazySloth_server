@@ -4,10 +4,9 @@ const contentSchema = require('./contentSchema.js')
 const {Schema} = mongoose;
 
 const blogSchema = new Schema({
-    id : {
-       type : String,
-       required : true,
-       unique : true 
+    _id: {
+        type: String,
+        required: true,
     },
     title: {
        type: String,
@@ -24,13 +23,13 @@ const blogSchema = new Schema({
         default: Date.now
     },
     content : {
-        type: [contentSchema]
+        type: [contentSchema],
         default : []
-    }    
+    },
     upVote : {
         type : Number,
         default : 0
-    }
+    },
     downVote : {
         type : Number,
         default : 0

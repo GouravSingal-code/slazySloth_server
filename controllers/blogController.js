@@ -1,23 +1,41 @@
-const { isNullOrEmpty } = require('./utils/isNullOrEmpty');
-const { responseBody } = require('./utils/responseBody');
+const { isNullOrEmpty } = require('../utils/isNullOrEmpty');
+const { responseBody } = require('../utils/responseBody');
 const BlogModel = require('../models/blogModel');
 const BlogSchema = require('../schemas/blogSchema');
+const UserModel = require("../models/usersModel");
+const {generateS3Url} = require('../s3');
+
 
 class BlogController {
 
-    async getAllBlogs(){
+    async getAllBlogs(req, res){
         try {
-
-            const blogs = await BlogModel.getBlogs();
+            console.log(req.query);
+            const blogs = await BlogModel.getBlogs({author:req.query.email});
             if (blogs) {
-              res.json(blogs);
+              res.status(201).json(responseBody('200','Successfully fetch all blogs',blogs));
             } else {
-              res.status(404).json(responseBody('Blogs not found',{}));
+              res.status(404).json(responseBody('404','Blogs not found',{}));
             }
           } catch (error) {
-            res.status(500).json(responseBody('Internal server error', {}));
+            res.status(500).json(responseBody('500','Internal server error', {}));
         }       
     }
+
+
+    async getBlog(req, res){
+        try {
+            const blog = await BlogModel.getBlogs({_id:req.query.id});
+            if (blog) {
+                res.status(201).json(responseBody('200','Successfully fetch the blog',blog));
+            } else {
+                res.status(404).json(responseBody('404','Blog not found',{}));
+            }
+        } catch (error) {
+            res.status(500).json(responseBody('500','Internal server error', {}));
+        }
+    }
+
     
     async getAllBlogsPerUser(req, res){
         try {
@@ -55,49 +73,17 @@ class BlogController {
     }
 
   async uploadBlog(req, res){
-    try {
-      if( isNullOrEmpty(req.body.id) || isNullOrEmpty(req.body.author) || isNullOrEmpty(req.body.title) ){
-        res.status(404).json(responseBody('Important info is missing' , req.body));
+      try {
+          const newBlog = req.body;
+          for(const element of newBlog.content) {
+              element.imageUrl = await generateS3Url();
+          }
+          console.log(newBlog);
+          const createdBlog = await BlogModel.createBlog(newBlog);
+          res.status(201).json(responseBody('200',"blog successfully updated", createdBlog));
+      } catch (error) {
+          res.status(500).json(responseBody('500','Internal server error', error));
       }
-        const blogObject = new BlogSchema({
-          id : req.body.id,
-          author : req.body.userId,
-          title : req.body.title,
-          content : req.body.content
-        });
-        const blog = await BlogModel.updateBlog(blogObject);
-        if (user) {
-          res.status(201).json({"Blog successfully uploaded"});
-        } else {
-          res.status(404).json({ error: 'Blog failed to upload' });
-        }
-      
-    } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  }
-
-  async updateBlog(req, res){
-    try {
-      if( isNullOrEmpty(req.body.id) || isNullOrEmpty(req.body.author) || isNullOrEmpty(req.body.title) ){
-        res.status(404).json(responseBody('Important info is missing' , req.body));
-      }
-        const blogObject = new BlogSchema({
-          id : req.body.id,
-          author : req.body.userId,
-          title : req.body.title,
-          content : req.body.content
-        });
-        const blog = await BlogModel.updateBlog(req.body.id, blogObject);
-        if (user) {
-          res.status(201).json({"Blog successfully updated"});
-        } else {
-          res.status(404).json({ error: 'Blog not found' });
-        }
-      
-    } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
-    }
   }
 
 

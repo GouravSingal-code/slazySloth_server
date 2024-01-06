@@ -1,5 +1,5 @@
 const responseBody = (status, msg , obj) => {
-    const newObj = { ...obj, status: status,message: msg};
+    const newObj = { response:obj, status: status,message: msg};
     return JSON.stringify(newObj);
 };
   

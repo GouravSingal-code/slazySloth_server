@@ -5,9 +5,11 @@ const contentSchema = new Schema({
     text : {
        type : String,
     },
-    imageData: {
-        type: Buffer,
-        required: true,
+    imageUrl: {
+        type: String,
+    },
+    textAreaActive: {
+        type: Boolean
     }
 })
 

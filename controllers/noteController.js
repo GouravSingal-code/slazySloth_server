@@ -1,5 +1,5 @@
-const { isNullOrEmpty } = require('./utils/isNullOrEmpty');
-const { responseBody } = require('./utils/responseBody');
+const { isNullOrEmpty } = require('../utils/isNullOrEmpty');
+const { responseBody } = require('../utils/responseBody');
 const NoteModel = require('../models/noteModel');
 const NoteSchema = require('../schemas/noteSchema');
 

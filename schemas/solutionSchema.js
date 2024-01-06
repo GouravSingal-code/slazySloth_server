@@ -3,24 +3,23 @@ const {Schema} = mongoose;
 const linkSchema = require('./linkSchema');
 
 const solutionSchema = new Schema({
-    id : {
+    solutionId : {
+        type: String,
+        required: true,
+        unique : true
+    },
+    problemNo : {
        type : String,
        required : true,
-       unique : true 
-    }
-    problemId : {
-       type : String,
-       required : true
     },
     userId: {
        type: String,
        required: true
     },
     solutionLink:{
-        type:linkSchema,
+        type:String,
         required:true,
-        unique:true
     }
 })
 
-module.exports = userSchema
+module.exports = solutionSchema

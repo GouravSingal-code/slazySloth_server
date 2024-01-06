@@ -21,9 +21,7 @@ class UserModel {
 
   async createUser(newUser) {
     try{
-      console.log(newUser);
       const createdUser = await User.create(newUser);
-      console.log(createdUser);
       return createdUser;
     }catch (e){
       return e["message"];
